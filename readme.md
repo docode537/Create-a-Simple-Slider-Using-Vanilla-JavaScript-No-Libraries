@@ -2,6 +2,13 @@
 
 A simple, lightweight, and customizable infinite loop slider built with vanilla JavaScript. It includes navigation dots, auto-slide functionality, and smooth transitions.
 
+## 🚀 Branches
+
+This project has two branches:
+
+1. **slider-part-1**: A basic infinite loop slider without smooth transition from the last to the first slide (or vice versa).
+2. **slider-part-2**: An enhanced version with smooth transition when looping from the last slide back to the first (or vice versa).
+
 ## Features
 - **Infinite Loop:** Seamlessly loops through slides without interruption.
 - **Auto-Slide:** Slides move automatically after a specified interval.
@@ -10,7 +17,7 @@ A simple, lightweight, and customizable infinite loop slider built with vanilla 
 - **Customizable:** Easily modify timing, transitions, and styles.
 
 ## Demo
-Insert a link or screenshot of your slider in action.
+![slider demo](image.png)
 
 ## Installation
 1. Download or clone the repository.

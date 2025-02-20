@@ -43,7 +43,7 @@ Customize the styles to match your design needs.
 Ensure the script initializes after the DOM is loaded:
 ```js
 document.addEventListener("DOMContentLoaded", function () {
-    initSlider();
+    initializeSlider();
 });
 ```
 

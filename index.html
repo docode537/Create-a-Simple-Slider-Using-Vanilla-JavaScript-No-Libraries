@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slider Using Vanilla Js</title>
+</head>
+<style>
+    *,
+    *::before,
+    *::after {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        padding: 20px;
+        font-family: Arial, Helvetica, sans-serif;
+        background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    }
+
+    body>h1 {
+        text-transform: capitalize;
+        color: white;
+        text-shadow: 0px 2px 5px rgba(0, 0, 0, 0.373);
+        margin-bottom: 1rem;
+        font-size: clamp(2rem, 3vw, 2.5rem);
+    }
+
+    .sliderContainer {
+        max-width: 600px;
+        overflow: hidden;
+        border-radius: 15px;
+        position: relative;
+        isolation: isolate;
+    }
+
+    .slider {
+        display: flex;
+        transition: 300ms ease;
+    }
+
+    .slider .slide {
+        flex-shrink: 0;
+        width: 100%;
+    }
+
+    .slider .slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .sliderContainer .arrows {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 96%;
+        left: 2%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .sliderContainer .arrows button {
+        border: none;
+        background-color: rgba(0, 0, 0, 0.495);
+        color: white;
+        font-size: clamp(1.2rem, 1.5vw, 1.8rem);
+        width: 45px;
+        height: 45px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        transition: 300ms ease;
+        cursor: pointer;
+    }
+
+    .sliderContainer .arrows button:hover {
+        background-color: rgba(0, 0, 0, 0.736);
+        transform: scale(1.1);
+    }
+
+    .sliderContainer .arrows button:active {
+        background-color: rgba(0, 0, 0, 0.884);
+        transform: scale(1);
+    }
+
+    .sliderContainer .dots {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        bottom: 0.5rem;
+        width: 100%;
+        /* padding: 1rem;
+        background-color: red; */
+    }
+
+    .sliderContainer .dots .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.444);
+        background-color: rgba(255, 255, 255, 0.495);
+        transition: 200ms ease;
+        cursor: pointer;
+    }
+
+    .sliderContainer .dots .dot.active {
+        background-color: white;
+        transform: scale(1.3);
+    }
+
+    .sliderContainer .dots .dot:hover {
+        background-color: white;
+    }
+</style>
+
+<body>
+    <h1>Slider Using Vanilla Js</h1>
+    <div class="sliderContainer">
+        <div class="slider">
+            <div class="slide"><img src="./images/img-1.webp" alt=""></div>
+            <div class="slide"><img src="./images/img-2.webp" alt=""></div>
+            <div class="slide"><img src="./images/img-3.webp" alt=""></div>
+            <div class="slide"><img src="./images/img-4.webp" alt=""></div>
+            <div class="slide"><img src="./images/img-5.webp" alt=""></div>
+            <div class="slide"><img src="./images/img-6.webp" alt=""></div>
+        </div>
+        <!-- arrows -->
+        <div class="arrows">
+            <button class="prev">&#10094;</button>
+            <button class="next">&#10095;</button>
+        </div>
+        <!-- navigation dots -->
+        <div class="dots">
+            <!-- we will add these dots using Js -->
+            <!-- <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span> -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeSlider();
+        })
+        function initializeSlider() {
+            const sliderContainer = document.querySelector('.sliderContainer');
+            const slider = sliderContainer.querySelector('.slider');
+            let slides = [...slider.querySelectorAll('.slide')];
+            const nextBtn = sliderContainer.querySelector('.arrows .next')
+            const prevBtn = sliderContainer.querySelector('.arrows .prev')
+            const dotsContainer = sliderContainer.querySelector('.dots');
+
+            //slider variables
+            // let currentIndex = 0;
+            let currentIndex = 1;
+            let isAnimating = false;
+            let interval;
+            //clone first and last slides for smooth looping
+            const firstClone = slides[0].cloneNode(true);
+            const lastClone = slides[slides.length - 1].cloneNode(true);
+            slider.appendChild(firstClone);
+            slider.insertBefore(lastClone, slides[0]);
+
+            // set initial position to slider after inserting clones
+            slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+            //update slides list
+            slides = [...slider.querySelectorAll('.slide')];
+            //insert dots
+            slides.forEach((slide, index) => {
+                //ignore cloned nodes
+                if (index === 0 || index + 1 === slides.length) {
+                    return;
+                }
+                //way 1.
+                // set first dot as active
+                // currentIndex == index 
+                // ?  dotsContainer.innerHTML += `<span class="dot active"></span>`
+                // : dotsContainer.innerHTML += `<span class="dot"></span>`;
+
+                //way 2.
+                let dot = document.createElement('span')
+                dot.classList.add('dot');
+                index == currentIndex && dot.classList.add('active');
+                dotsContainer.appendChild(dot);
+            });
+            // select all dots in js
+            const allDots = [...dotsContainer.querySelectorAll('.dot')];
+
+            // create a reusable function for updateSlide on every interaction
+            function updateSlide() {
+                slider.style.transition = "transform 0.5s ease"
+                slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+                //update dots
+                // allDots.forEach((dot, index) => {
+                //     if (index == currentIndex) {
+                //         dot.classList.add('active')
+                //     } else {
+                //         dot.classList.remove('active')
+                //     }
+                // });
+
+                //update dots (with looping effect)
+                allDots.forEach((dot,index)=>{ //nutrilize all the dots
+                    dot.classList.remove('active');
+                })
+
+                //correcting the active dot index (since currentIndex includes clones)
+                if(currentIndex === 0){
+                    allDots[allDots.length-1].classList.add("active");
+                }else if(currentIndex === slides.length -1){
+                    allDots[0].classList.add("active");
+                }else{
+                    allDots[currentIndex-1].classList.add("active");
+                }
+
+                //Handle infinit looping effect here
+                setTimeout(() => {
+                    if (currentIndex >= slides.length - 1) {
+                        slider.style.transition = "none";
+                        currentIndex = 1;
+                        slider.style.transform = `translateX(-100%)`;
+                        dots[0].classList.add('active');
+                    } else if (currentIndex <= 0) {
+                        slider.style.transition = "none";
+                        currentIndex = slides.length - 2;
+                        slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+                        dots[dots.length - 1].classList.add('active');
+                    }
+                }, 500)
+            }
+
+            function nextSlide() { // for next button click
+                if (isAnimating) return;
+                isAnimating = true;
+                // currentIndex = (currentIndex + 1) % slides.length
+                currentIndex++;
+                updateSlide()
+                setTimeout(() => {
+                    isAnimating = false;
+                }, 500)
+                resetAutoSlide()
+            }
+            function prevSlide() {// for prev button click
+                if (isAnimating) return;
+                isAnimating = true;
+                // currentIndex = (currentIndex - 1 + slides.length) % slides.length
+                currentIndex--;
+                updateSlide()
+                setTimeout(() => {
+                    isAnimating = false;
+                }, 500)
+                resetAutoSlide()
+            }
+            function goToSlide(index) {// for dots
+                if (isAnimating) return;
+                isAnimating = true;
+                // currentIndex = index;
+                currentIndex = index + 1;
+                updateSlide()
+                setTimeout(() => {
+                    isAnimating = false;
+                }, 500)
+                resetAutoSlide()
+            }
+            // reset autoslide on interaction
+            function resetAutoSlide() {
+                clearInterval(interval);
+                //re-initialize interval
+                interval = setInterval(nextSlide, 3000);
+            }
+            //add auto slide functionality
+            interval = setInterval(nextSlide, 3000);
+
+
+            nextBtn.addEventListener('click', nextSlide);
+            prevBtn.addEventListener('click', prevSlide);
+            allDots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    goToSlide(index)
+                })
+            })
+        }
+    </script>
+</body>
+
+</html>

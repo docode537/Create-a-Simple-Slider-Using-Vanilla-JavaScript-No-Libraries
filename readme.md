@@ -57,9 +57,9 @@ You can modify the following options in `js code`:
 - Pause auto-slide on hover.
 - Add arrow navigation.
 ## 🎥 Video Tutorial
-Watch the tutorial video: [Link](https://www.youtube.com/watch?v=EMuYLNUPxCs).
+Watch the tutorial video: [Link](#).
 ## Blog Post Tutorial
-🐦 blog post: [Blog Post](https://docode.co.in/post/simple-accordion-using-javascript)  
+🐦 blog post: [Blog Post](https://docode.co.in/post/simple-infinite-loop-slider-using-vanilla-javascript)  
 ## 📩 Connect With Me
 🌐 Website: [DoCode](https://docode.co.in/)
 📧 Email: docode537@gmail.com 

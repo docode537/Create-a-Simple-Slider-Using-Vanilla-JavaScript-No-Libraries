@@ -10,7 +10,7 @@ A simple, lightweight, and customizable infinite loop slider built with vanilla 
 - **Customizable:** Easily modify timing, transitions, and styles.
 
 ## Demo
-Insert a link or screenshot of your slider in action.
+![slider Demo](image.png)
 
 ## Installation
 1. Download or clone the repository.
